@@ -5,7 +5,9 @@ int main(void)
     t_fractal fractal;
     init_fractal(&fractal);
     render(&fractal);
-    mlx_hook(fractal.win_ptr, 17, 0, close_program, &fractal);
+    mlx_hook(fractal.win_ptr, DestroyNotify, 0, (void *)close_program, &fractal);
+    mlx_key_hook(fractal.win_ptr, keyhook, &fractal);
+    mlx_mouse_hook(fractal.win_ptr, mousehook, &fractal);
     mlx_loop(fractal.mlx_ptr);
     return (0);
 }
@@ -36,6 +38,9 @@ void    init_fractal(t_fractal *fractal)
         printf("Malloc error!");
         exit(1);
     }
+    fractal->offset_x = 0;
+    fractal->offset_y = 0;
+    fractal->scale = 1;
 }
 
 void render(t_fractal *fractal)
@@ -50,11 +55,13 @@ void render(t_fractal *fractal)
         y = 0;
         while (y < HEIGHT)
         {
-            temp.x = -2 + (4 * x / WIDTH);
-            temp.y = 2 - (4 * y / HEIGHT);
+            temp.x = (map(x, -2, +2, 0, WIDTH) * fractal->scale) + fractal->offset_x;
+            temp.y = (map(y, +2, -2, 0, HEIGHT) * fractal->scale) - fractal->offset_y;
             iterations = iterater(temp);
-            if (iterations < 200)
+            if (iterations < 40)
                 place_pixel(fractal, x, y, 0x000000 + 0xFFFFFF * ((double)iterations / 200));
+            else
+                place_pixel(fractal, x, y, 0x000000);
             y++;
         }
         x++;
@@ -90,7 +97,7 @@ t_complex square_complex(t_complex z)
 
 int iterater(t_complex c)
 {
-    int iterations = 200;
+    int iterations = 40;
     int i = 0;
     t_complex z;
     z.x = 0.0;
@@ -108,12 +115,47 @@ int iterater(t_complex c)
 
 void close_program(t_fractal *fractal)
 {
-    if (fractal->img.addr)
-    {
-        mlx_destroy_image(fractal->mlx_ptr, fractal->img.addr);
-        free(fractal->img.img);
-    }
+    if (fractal->img.addr != NULL)
+        mlx_destroy_image(fractal->mlx_ptr, fractal->img.img);
     if (fractal->win_ptr)
-       mlx_destroy_window(fractal->mlx_ptr, fractal->win_ptr);
+        mlx_destroy_window(fractal->mlx_ptr, fractal->win_ptr);
+    if (fractal->mlx_ptr)
+    {
+        mlx_destroy_display(fractal->mlx_ptr);
+        free(fractal->mlx_ptr);
+    }
     exit(0);
+}
+
+int keyhook(int keycode, t_fractal *fractal)
+{
+    printf("%d was pressed\n", keycode);
+    if (keycode == XK_Escape)
+        close_program(fractal);
+    else if (keycode == XK_Left || keycode == XK_a)
+        fractal->offset_x -= (.5 * fractal->scale);
+    else if (keycode == XK_Right || keycode == XK_d)
+        fractal->offset_x += (.5 * fractal->scale);
+    else if (keycode == XK_Up || keycode == XK_w)
+        fractal->offset_y -= (.5 * fractal->scale);
+    else if (keycode == XK_Down || keycode == XK_s)
+        fractal->offset_y += (.5 * fractal->scale);
+    render(fractal);
+    return (0);
+}
+
+int mousehook(int button, int x, int y, t_fractal *fractal)
+{
+    printf("%d was pressed at (%d, %d)\n", button, x, y);
+    if (button == 4)
+        fractal->scale *= 0.9;
+    if (button == 5)
+        fractal->scale *= 1.1;
+    render(fractal);
+    return (0);
+}
+
+double map(double unscaled_num, double new_min, double new_max, double old_min, double old_max)
+{
+    return (new_max - new_min) * (unscaled_num - old_min) / (old_max - old_min) + new_min;
 }
