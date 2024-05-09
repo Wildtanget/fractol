@@ -78,9 +78,13 @@ void render(t_fractal *fractal)
         while (y < HEIGHT)
         {
             temp.x = (map(x, -2, +2, 0, WIDTH) * fractal->scale) + fractal->offset_x;
-            temp.y = (map(y, +2, -2, 0, HEIGHT) * fractal->scale) - fractal->offset_y;
+            temp.y = (map(y, -2, +2, 0, HEIGHT) * fractal->scale) + fractal->offset_y;
             if (fractal->set == MANDELBROT)
-                escape_num = iterater(temp, fractal);
+                escape_num = mandelbrot(temp, fractal);
+            else if (fractal->set == BURNING_SHIP)
+                escape_num = burning_ship(temp, fractal);
+            else
+                close_program(fractal);
             if (escape_num < fractal->iterations)
                 place_pixel(fractal, x, y, scale_color(escape_num, fractal));
             else
@@ -118,7 +122,17 @@ t_complex square_complex(t_complex z)
     return (result);
 }
 
-int iterater(t_complex c, t_fractal *fractal)
+
+t_complex square_complex_abs(t_complex z)
+{
+    t_complex result;
+
+    result.x = (z.x * z.x) - (z.y * z.y);
+    result.y = 2 * fabs(z.x * z.y);
+    return (result);
+}
+
+double mandelbrot(t_complex c, t_fractal *fractal)
 {
     int i = 0;
     t_complex z;
@@ -134,6 +148,24 @@ int iterater(t_complex c, t_fractal *fractal)
     }
     return (fractal->iterations);
 }
+
+double burning_ship(t_complex c, t_fractal *fractal)
+{
+    int i = 0;
+    t_complex z;
+    z.x = 0.0;
+    z.y = 0.0;
+
+    while (i < fractal->iterations)
+    {
+        z = sum_complex(square_complex_abs(z), c);
+        if ((z.x * z.x) + (z.y * z.y) > 4)
+            return (i);
+        i++;
+    }
+    return (fractal->iterations);
+}
+
 
 void close_program(t_fractal *fractal)
 {
@@ -194,7 +226,7 @@ void handle_error(int code)
     exit(1);
 }
 
-int scale_color(int escape_num, t_fractal *fractal) {
+int scale_color(double escape_num, t_fractal *fractal) {
     int hex_color;
 
     double t = (double)escape_num / fractal->iterations;

@@ -6,6 +6,7 @@
 # include <stdlib.h>
 # include <X11/X.h>
 # include <X11/keysym.h>
+# include <math.h>
 
 # define WIDTH 640
 # define HEIGHT 640
@@ -58,7 +59,7 @@ typedef struct s_complex {
 void        init_fractal(t_fractal *fractal);
 void        render(t_fractal *fractal);
 void        place_pixel(t_fractal *fractal, int x, int y, int color);
-int         iterater(t_complex c, t_fractal *fractal);
+double         mandelbrot(t_complex c, t_fractal *fractal);
 t_complex   square_complex(t_complex z);
 t_complex   sum_complex(t_complex z1, t_complex z2);
 void        close_program(t_fractal *fractal);
@@ -68,7 +69,9 @@ double      map(double unscaled_num, double new_min, double new_max, double old_
 void check_arguments(int argc, char **argv, t_fractal *fractal);
 int         ft_strncmp(char *s1, char *s2, int length);
 void handle_error(int code);
-int scale_color(int escape_num, t_fractal *fractal);
+int scale_color(double escape_num, t_fractal *fractal);
 t_rgb hex_to_rgb(int color);
 void shift_color(int keycode, t_fractal *fractal);
+double burning_ship(t_complex c, t_fractal *fractal);
+t_complex square_complex_abs(t_complex z);
 #endif
