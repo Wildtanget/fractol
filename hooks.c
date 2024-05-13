@@ -40,14 +40,14 @@ int	mousehook(int button, int x, int y, t_fractal *fractal)
 {
 	if (button == 4 && x && y)
 	{
-		fractal->offset_x = (scale_map(x, -2, +2, WIDTH) - fractal->offset_x) * (1 / fractal->scale);
-		fractal->offset_y = (scale_map(y, +2, +2, HEIGHT) - fractal->offset_x) * (1 / fractal->scale);
+		// fractal->offset_x = (scale_map(x, -2, +2, WIDTH) - fractal->offset_x) * (1 / fractal->scale);
+		// fractal->offset_y = (scale_map(y, +2, +2, HEIGHT) - fractal->offset_x) * (1 / fractal->scale);
 		fractal->scale *= 0.9;
 	}
 	else if (button == 5)
 	{
-		fractal->offset_x = (scale_map(x, -2, +2, WIDTH) - fractal->offset_x) * (1 / fractal->scale);
-		fractal->offset_y = (scale_map(y, +2, +2, HEIGHT) - fractal->offset_x) * (1 / fractal->scale);
+		// fractal->offset_x = (scale_map(x, -2, +2, WIDTH) - fractal->offset_x) * (1 / fractal->scale);
+		// fractal->offset_y = (scale_map(y, +2, +2, HEIGHT) - fractal->offset_x) * (1 / fractal->scale);
 		fractal->scale *= 1.1;
 	}
 	else if (button == 1 && fractal->set == JULIA)

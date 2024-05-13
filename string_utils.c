@@ -59,12 +59,12 @@ double	ft_atod(char *str)
 	double	left;
 	double	right;
 	int		sign;
-	double	factor;
+	// double	factor;
 
 	sign = 1;
 	left = 0;
 	right = 0;
-	factor = 10;
+	// factor = 10;
 	while (*str == ' ' || *str == '+')
 		str++;
 	if (*str == '-')
