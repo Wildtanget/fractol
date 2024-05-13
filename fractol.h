@@ -6,7 +6,7 @@
 /*   By: notahtah <notahtah@student.codam.nl>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 18:27:49 by notahtah          #+#    #+#             */
-/*   Updated: 2024/05/13 19:38:30 by notahtah         ###   ########.fr       */
+/*   Updated: 2024/05/13 19:50:54 by notahtah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,8 +118,6 @@ void		reset(t_fractal *fractal);
 *============================================================================*/
 int			ft_strncmp(char *s1, char *s2, int length);
 double		ft_atod(char *str);
-double		convert_left(char *str);
-double		convert_right(char *str);
 
 /*=============================================================================
 *                                 Fractal Functionss
@@ -141,6 +139,7 @@ t_complex	square_complex_abs(t_complex z);
 void		render(t_fractal *fractal);
 void		place_pixel(t_fractal *fractal, int x, int y, int color);
 double		scale_map(double x, double y_mn, double y_mx, double x_mx);
+double		fractal_selecter(t_complex z, t_fractal *fractal);
 
 /*=============================================================================
 *                                 Color Functions

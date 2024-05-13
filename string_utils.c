@@ -6,7 +6,7 @@
 /*   By: notahtah <notahtah@student.codam.nl>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 18:57:09 by notahtah          #+#    #+#             */
-/*   Updated: 2024/05/13 19:37:56 by notahtah         ###   ########.fr       */
+/*   Updated: 2024/05/13 19:54:07 by notahtah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,35 @@ int	ft_strncmp(char *s1, char *s2, int length)
 		length--;
 	}
 	return (*s1 - *s2);
+}
+
+static double	convert_left(char *str)
+{
+	double	result;
+
+	result = 0;
+	while (*str && *str != '.')
+	{
+		result = result * 10 + *str - 48;
+		str++;
+	}
+	return (result);
+}
+
+static double	convert_right(char *str)
+{
+	double	result;
+	int		factor;
+
+	result = 0;
+	factor = 10;
+	while (*str)
+	{
+		result = result + (*str - 48) / factor;
+		factor = factor * 10;
+		str++;
+	}
+	return (result);
 }
 
 double	ft_atod(char *str)
@@ -48,33 +77,4 @@ double	ft_atod(char *str)
 		str++;
 	right = convert_right(str);
 	return ((left + right) * sign);
-}
-
-double	convert_left(char *str)
-{
-	double	result;
-
-	result = 0;
-	while (*str && *str != '.')
-	{
-		result = result * 10 + *str - 48;
-		str++;
-	}
-	return (result);
-}
-
-double	convert_right(char *str)
-{
-	double	result;
-	int		factor;
-
-	result = 0;
-	factor = 10;
-	while (*str)
-	{
-		result = result + (*str - 48) / factor;
-		factor = factor * 10;
-		str++;
-	}
-	return (result);
 }

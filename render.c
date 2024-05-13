@@ -6,7 +6,7 @@
 /*   By: notahtah <notahtah@student.codam.nl>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 19:02:17 by notahtah          #+#    #+#             */
-/*   Updated: 2024/05/13 19:09:36 by notahtah         ###   ########.fr       */
+/*   Updated: 2024/05/13 19:51:30 by notahtah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,37 +16,43 @@ void	render(t_fractal *fractal)
 {
 	double		x;
 	double		y;
-	t_complex	temp;
-	double		escape_num;
+	t_complex	z;
+	double		iter;
 
-	x = 0;
-	while (x < WIDTH)
+	x = -1;
+	while (x++ < WIDTH)
 	{
-		y = 0;
-		while (y < HEIGHT)
+		y = -1;
+		while (y++ < HEIGHT)
 		{
-			temp.x = (scale_map(x, -2, +2, WIDTH)
+			z.x = (scale_map(x, -2, +2, WIDTH)
 					* fractal->scale) + fractal->offset_x;
-			temp.y = (scale_map(y, 2, -2, HEIGHT)
+			z.y = (scale_map(y, 2, -2, HEIGHT)
 					* fractal->scale) - fractal->offset_y;
-			if (fractal->set == MANDELBROT)
-				escape_num = mandelbrot(temp, fractal);
-			else if (fractal->set == BURNING_SHIP)
-				escape_num = burning_ship(temp, fractal);
-			else if (fractal->set == JULIA)
-				escape_num = julia(temp, fractal);
-			if (escape_num < fractal->iterations
-				&& (temp.x * temp.x) + (temp.y * temp.y) <= 4)
-				place_pixel(fractal, x, y, scale_color(escape_num, fractal));
+			iter = fractal_selecter(z, fractal);
+			if (iter < fractal->iterations && (z.x * z.x) + (z.y * z.y) <= 4)
+				place_pixel(fractal, x, y, scale_color(iter, fractal));
 			else
 				place_pixel(fractal, x, y, BLACK);
-			y++;
 		}
-		x++;
 	}
 	mlx_put_image_to_window(fractal->mlx_ptr,
 		fractal->win_ptr, fractal->img.img, 0, 0);
 	display_settings(fractal);
+}
+
+double	fractal_selecter(t_complex z, t_fractal *fractal)
+{
+	double	escape_num;
+
+	escape_num = 0;
+	if (fractal->set == MANDELBROT)
+		escape_num = mandelbrot(z, fractal);
+	else if (fractal->set == BURNING_SHIP)
+		escape_num = burning_ship(z, fractal);
+	else if (fractal->set == JULIA)
+		escape_num = julia(z, fractal);
+	return (escape_num);
 }
 
 void	place_pixel(t_fractal *fractal, int x, int y, int color)

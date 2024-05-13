@@ -6,7 +6,7 @@
 /*   By: notahtah <notahtah@student.codam.nl>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 19:31:22 by notahtah          #+#    #+#             */
-/*   Updated: 2024/05/13 19:32:14 by notahtah         ###   ########.fr       */
+/*   Updated: 2024/05/13 20:24:44 by notahtah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,22 @@ int	keyhook(int keycode, t_fractal *fractal)
 int	mousehook(int button, int x, int y, t_fractal *fractal)
 {
 	if (button == 4 && x && y)
+	{
+		fractal->offset_x = (scale_map(x, -2, +2, WIDTH) - fractal->offset_x) * (1 / fractal->scale);
+		fractal->offset_y = (scale_map(y, +2, +2, HEIGHT) - fractal->offset_x) * (1 / fractal->scale);
 		fractal->scale *= 0.9;
+	}
 	else if (button == 5)
+	{
+		fractal->offset_x = (scale_map(x, -2, +2, WIDTH) - fractal->offset_x) * (1 / fractal->scale);
+		fractal->offset_y = (scale_map(y, +2, +2, HEIGHT) - fractal->offset_x) * (1 / fractal->scale);
 		fractal->scale *= 1.1;
+	}
+	else if (button == 1 && fractal->set == JULIA)
+	{
+		fractal->julia.x = scale_map(x, -2, +2, WIDTH);
+		fractal->julia.y = scale_map(y, +2, -2, HEIGHT);
+	}
 	render(fractal);
 	return (0);
 }

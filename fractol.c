@@ -6,7 +6,7 @@
 /*   By: notahtah <notahtah@student.codam.nl>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 18:27:52 by notahtah          #+#    #+#             */
-/*   Updated: 2024/05/13 19:31:55 by notahtah         ###   ########.fr       */
+/*   Updated: 2024/05/13 20:01:58 by notahtah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,4 +76,6 @@ void	display_settings(t_fractal *fractal)
 		HEIGHT * 0.18, WHITE, "1-9          => CHANGE COLOR");
 	mlx_string_put(fractal->mlx_ptr, fractal->win_ptr, WIDTH * 0.04,
 		HEIGHT * 0.20, WHITE, "SCROLL WHEEL => ZOOM IN/OUT");
+	mlx_string_put(fractal->mlx_ptr, fractal->win_ptr, WIDTH * 0.04,
+		HEIGHT * 0.22, WHITE, "LEFT CLICK   => CHANGE JULIA");
 }
