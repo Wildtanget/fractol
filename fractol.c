@@ -61,8 +61,8 @@ void    init_fractal(t_fractal *fractal)
     fractal->scale = 1;
     fractal->iterations = 40;
     fractal->color.r = 255;
-    fractal->color.g = 0;
-    fractal->color.b = 0;
+    fractal->color.g = 255;
+    fractal->color.b = 255;
 }
 
 void render(t_fractal *fractal)
@@ -70,7 +70,7 @@ void render(t_fractal *fractal)
     double x;
     double y;
     t_complex temp;
-    int escape_num;
+    double escape_num;
     x = 0;
     while (x < WIDTH)
     {
@@ -88,12 +88,14 @@ void render(t_fractal *fractal)
             if (escape_num < fractal->iterations)
                 place_pixel(fractal, x, y, scale_color(escape_num, fractal));
             else
-                place_pixel(fractal, x, y, 0x000000);
+                place_pixel(fractal, x, y, BLACK);
             y++;
         }
         x++;
     }
+
     mlx_put_image_to_window(fractal->mlx_ptr, fractal->win_ptr, fractal->img.img, 0, 0);
+	display_settings(fractal);
 }
 
 void place_pixel(t_fractal *fractal, int x, int y, int color)
@@ -136,14 +138,16 @@ double mandelbrot(t_complex c, t_fractal *fractal)
 {
     int i = 0;
     t_complex z;
+	double	z_squared;
     z.x = 0.0;
     z.y = 0.0;
 
     while (i < fractal->iterations)
     {
         z = sum_complex(square_complex(z), c);
+		z_squared = (z.x * z.x) + (z.y * z.y);
         if ((z.x * z.x) + (z.y * z.y) > 4)
-            return (i);
+            return (i + 1 - log(log(sqrt(z_squared))) / log(2.0));
         i++;
     }
     return (fractal->iterations);
@@ -151,16 +155,18 @@ double mandelbrot(t_complex c, t_fractal *fractal)
 
 double burning_ship(t_complex c, t_fractal *fractal)
 {
-    int i = 0;
-    t_complex z;
+    int 		i = 0;
+    t_complex 	z;
     z.x = 0.0;
     z.y = 0.0;
+	double	z_squared;
 
     while (i < fractal->iterations)
     {
         z = sum_complex(square_complex_abs(z), c);
+		z_squared = (z.x * z.x) + (z.y * z.y);
         if ((z.x * z.x) + (z.y * z.y) > 4)
-            return (i);
+            return (i + 1 - log(log(sqrt(z_squared))) / log(2.0));
         i++;
     }
     return (fractal->iterations);
@@ -183,7 +189,6 @@ void close_program(t_fractal *fractal)
 
 int keyhook(int keycode, t_fractal *fractal)
 {
-    // printf("%d was pressed\n", keycode);
     if (keycode == XK_Escape)
         close_program(fractal);
     else if (keycode == XK_Left || keycode == XK_a)
@@ -194,19 +199,20 @@ int keyhook(int keycode, t_fractal *fractal)
         fractal->offset_y -= (.5 * fractal->scale);
     else if (keycode == XK_Down || keycode == XK_s)
         fractal->offset_y += (.5 * fractal->scale);
-    else if (keycode == XK_minus)
+    else if (keycode == XK_o)
         fractal->iterations -= 10;
-    else if (keycode == XK_equal)
+    else if (keycode == XK_i)
         fractal->iterations += 10;
     else if (keycode >= XK_1 && keycode <= XK_9)
         shift_color(keycode, fractal);
+	else if (keycode == XK_r)
+		reset(fractal);
     render(fractal);
     return (0);
 }
 
 int mousehook(int button, int x, int y, t_fractal *fractal)
 {
-    // printf("%d was pressed at (%d, %d)\n", button, x, y);
     if (button == 4 && x && y)
         fractal->scale *= 0.9;
     if (button == 5)
@@ -270,4 +276,23 @@ t_rgb hex_to_rgb(int hex)
     return (color);
 }
 
-//cc -Wall -Wextra -Werror  fractol.c minilibx-linux/libmlx_Linux.a -lX11 -lXext -lm -O2
+void reset(t_fractal *fractal)
+{
+	fractal->offset_x = 0;
+    fractal->offset_y = 0;
+    fractal->scale = 1;
+    fractal->iterations = 40;
+    fractal->color.r = 255;
+    fractal->color.g = 255;
+    fractal->color.b = 255;
+}
+
+void display_settings(t_fractal *fractal)
+{
+	mlx_string_put(fractal->mlx_ptr, fractal->win_ptr, WIDTH * 0.10, HEIGHT * 0.08, WHITE, "SETINGS");
+	mlx_string_put(fractal->mlx_ptr, fractal->win_ptr, WIDTH * 0.04, HEIGHT * 0.12, WHITE, "R            => RESET");
+    mlx_string_put(fractal->mlx_ptr, fractal->win_ptr, WIDTH * 0.04, HEIGHT * 0.14, WHITE, "W/A/S/D      => MOVE");
+	mlx_string_put(fractal->mlx_ptr, fractal->win_ptr, WIDTH * 0.04, HEIGHT * 0.16, WHITE, "I/O          => CHANGE ITERATIONS");
+	mlx_string_put(fractal->mlx_ptr, fractal->win_ptr, WIDTH * 0.04, HEIGHT * 0.18, WHITE, "1-9          => CHANGE COLOR");
+	mlx_string_put(fractal->mlx_ptr, fractal->win_ptr, WIDTH * 0.04, HEIGHT * 0.20, WHITE, "SCROLL WHEEL => ZOOM IN/OUT");
+}
