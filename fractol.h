@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   fractol.h                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: notahtah <notahtah@student.codam.nl>       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/13 18:27:49 by notahtah          #+#    #+#             */
+/*   Updated: 2024/05/13 19:07:07 by notahtah         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef FRACTOL_H
 # define FRACTOL_H
 
@@ -46,17 +58,19 @@ typedef struct s_complex {
     double y;
 }   t_complex;
 
-typedef struct s_fractal {
-    void    	*mlx_ptr;
-    void    	*win_ptr;
-    t_image 	img;
-    int     	set;
-    double  	offset_x;
-    double  	offset_y;
-    double  	scale;
-    int     	iterations;
-    t_rgb   	color;
-    t_complex julia;
+typedef struct s_fractal
+{
+	void		*mlx_ptr;
+	void		*win_ptr;
+	t_image		img;
+	int			set;
+	int			range;
+	double  	offset_x;
+	double  	offset_y;
+	double  	scale;
+	int     	iterations;
+	t_rgb   	color;
+	t_complex	julia;
 }   t_fractal;
 
 
@@ -69,7 +83,7 @@ t_complex   sum_complex(t_complex z1, t_complex z2);
 void        close_program(t_fractal *fractal);
 int         keyhook(int keycode, t_fractal *fractal);
 int         mousehook(int button, int x, int y, t_fractal *fractal);
-double      map(double unscaled_num, double new_min, double new_max, double old_min, double old_max);
+double		scale_map(double x, double y_mn, double y_mx, double x_mx);
 void 		check_arguments(int argc, char **argv, t_fractal *fractal);
 int         ft_strncmp(char *s1, char *s2, int length);
 void 		handle_error(int code);
