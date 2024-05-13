@@ -5,7 +5,7 @@ int main(int argc, char **argv)
     t_fractal fractal;
 
     check_arguments(argc, argv, &fractal);
-    init_fractal(&fractal);
+    init_fractal(argv, &fractal);
     render(&fractal);
     mlx_hook(fractal.win_ptr, DestroyNotify, 0, (void *)close_program, &fractal);
     mlx_key_hook(fractal.win_ptr, keyhook, &fractal);
@@ -16,17 +16,17 @@ int main(int argc, char **argv)
 
 void check_arguments(int argc, char **argv, t_fractal *fractal)
 {
-    if (argc == 1)
-    {
-        printf("Please specify a set.\nUsage: ./a.out \"set\"\n");
-        exit(1);
-    }
-    else if (ft_strncmp(argv[1], "mandelbrot", 10) == 0)
+	if (ft_strncmp(argv[1], "mandelbrot", 10) == 0 && argc == 2)
         fractal->set = MANDELBROT;
-    else if (ft_strncmp(argv[1], "julia", 5) == 0)
+    else if (ft_strncmp(argv[1], "julia", 5) == 0 && argc == 4)
         fractal->set = JULIA;
-    else if (ft_strncmp(argv[1], "burning_ship", 12) == 0)
+    else if (ft_strncmp(argv[1], "burning_ship", 12) == 0 && argc == 2)
         fractal->set = BURNING_SHIP;
+	else
+	{
+		printf("Invalid arguments!\nUsage: ./a.out \"fractal\" [x] [y]\n");
+        exit(1);
+	}
 }
 
 int ft_strncmp(char *s1, char *s2, int length)
@@ -42,7 +42,7 @@ int ft_strncmp(char *s1, char *s2, int length)
     return (*s1 - *s2);
 }
 
-void    init_fractal(t_fractal *fractal)
+void    init_fractal(char **argv, t_fractal *fractal)
 {
     fractal->mlx_ptr = mlx_init();
     if (fractal->mlx_ptr == NULL)
@@ -56,13 +56,12 @@ void    init_fractal(t_fractal *fractal)
     fractal->img.addr = mlx_get_data_addr(fractal->img.img, &fractal->img.bpp, &fractal->img.len, &fractal->img.endian);
     if (fractal->img.addr == NULL)
         handle_error(4);
-    fractal->offset_x = 0;
-    fractal->offset_y = 0;
-    fractal->scale = 1;
-    fractal->iterations = 40;
-    fractal->color.r = 255;
-    fractal->color.g = 255;
-    fractal->color.b = 255;
+    reset(fractal);
+	if (fractal->set == JULIA)
+	{
+		fractal->julia.x = ft_atod(argv[2]);
+		fractal->julia.y = ft_atod(argv[3]);
+	}
 }
 
 void render(t_fractal *fractal)
@@ -78,14 +77,14 @@ void render(t_fractal *fractal)
         while (y < HEIGHT)
         {
             temp.x = (map(x, -2, +2, 0, WIDTH) * fractal->scale) + fractal->offset_x;
-            temp.y = (map(y, -2, +2, 0, HEIGHT) * fractal->scale) + fractal->offset_y;
+            temp.y = (map(y, 2, -2, 0, HEIGHT) * fractal->scale) - fractal->offset_y;
             if (fractal->set == MANDELBROT)
                 escape_num = mandelbrot(temp, fractal);
             else if (fractal->set == BURNING_SHIP)
                 escape_num = burning_ship(temp, fractal);
-            else
-                close_program(fractal);
-            if (escape_num < fractal->iterations)
+            else if (fractal->set == JULIA)
+				escape_num = julia(temp, fractal);
+            if (escape_num < fractal->iterations && (temp.x * temp.x) + (temp.y * temp.y) <= 4)
                 place_pixel(fractal, x, y, scale_color(escape_num, fractal));
             else
                 place_pixel(fractal, x, y, BLACK);
@@ -172,6 +171,24 @@ double burning_ship(t_complex c, t_fractal *fractal)
     return (fractal->iterations);
 }
 
+double julia(t_complex c, t_fractal *fractal)
+{
+    int i = 0;
+    t_complex z;
+	double	z_squared;
+    z.x = c.x;
+    z.y = c.y;
+
+    while (i < fractal->iterations)
+    {
+        z = sum_complex(square_complex(z), fractal->julia);
+		z_squared = (z.x * z.x) + (z.y * z.y);
+        if ((z.x * z.x) + (z.y * z.y) > 4)
+            return (i + 1 - log(log(sqrt(z_squared))) / log(2.0));
+        i++;
+    }
+    return (fractal->iterations);
+}
 
 void close_program(t_fractal *fractal)
 {
@@ -295,4 +312,38 @@ void display_settings(t_fractal *fractal)
 	mlx_string_put(fractal->mlx_ptr, fractal->win_ptr, WIDTH * 0.04, HEIGHT * 0.16, WHITE, "I/O          => CHANGE ITERATIONS");
 	mlx_string_put(fractal->mlx_ptr, fractal->win_ptr, WIDTH * 0.04, HEIGHT * 0.18, WHITE, "1-9          => CHANGE COLOR");
 	mlx_string_put(fractal->mlx_ptr, fractal->win_ptr, WIDTH * 0.04, HEIGHT * 0.20, WHITE, "SCROLL WHEEL => ZOOM IN/OUT");
+}
+
+double ft_atod(char *str)
+{
+	double	left;
+	double	right;
+	int		sign;
+	double	factor;
+
+	sign = 1;
+	left = 0;
+	right = 0;
+	factor = 10;
+	while (*str == ' ' || *str == '+')
+		str++;
+	if (*str == '-')
+	{
+		sign = -1;
+		str++;
+	}
+	while (*str && *str != '.')
+	{
+		left = left * 10 + *str - 48;
+		str++;
+	}
+	if (*str == '.')
+		str++;
+	while (*str)
+	{
+		right = right + (*str - 48) / factor;
+		factor = factor * 10;
+		str++;
+	}
+	return ((left + right) * sign);
 }

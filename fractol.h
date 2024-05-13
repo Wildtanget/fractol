@@ -60,7 +60,7 @@ typedef struct s_fractal {
 }   t_fractal;
 
 
-void        init_fractal(t_fractal *fractal);
+void        init_fractal(char **argv, t_fractal *fractal);
 void        render(t_fractal *fractal);
 void        place_pixel(t_fractal *fractal, int x, int y, int color);
 double      mandelbrot(t_complex c, t_fractal *fractal);
@@ -76,8 +76,10 @@ void 		handle_error(int code);
 int 		scale_color(double escape_num, t_fractal *fractal);
 t_rgb 		hex_to_rgb(int color);
 void 		shift_color(int keycode, t_fractal *fractal);
+double 		julia(t_complex c, t_fractal *fractal);
 double 		burning_ship(t_complex c, t_fractal *fractal);
 t_complex 	square_complex_abs(t_complex z);
 void 		reset(t_fractal *fractal);
-void display_settings(t_fractal *fractal);
+void		display_settings(t_fractal *fractal);
+double		ft_atod(char *str);
 #endif
