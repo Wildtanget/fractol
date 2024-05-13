@@ -6,7 +6,7 @@
 /*   By: notahtah <notahtah@student.codam.nl>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 18:57:09 by notahtah          #+#    #+#             */
-/*   Updated: 2024/05/13 19:09:28 by notahtah         ###   ########.fr       */
+/*   Updated: 2024/05/13 19:37:56 by notahtah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,18 +43,38 @@ double	ft_atod(char *str)
 		sign = -1;
 		str++;
 	}
-	while (*str && *str != '.')
-	{
-		left = left * 10 + *str - 48;
-		str++;
-	}
+	left = convert_left(str);
 	if (*str == '.')
 		str++;
+	right = convert_right(str);
+	return ((left + right) * sign);
+}
+
+double	convert_left(char *str)
+{
+	double	result;
+
+	result = 0;
+	while (*str && *str != '.')
+	{
+		result = result * 10 + *str - 48;
+		str++;
+	}
+	return (result);
+}
+
+double	convert_right(char *str)
+{
+	double	result;
+	int		factor;
+
+	result = 0;
+	factor = 10;
 	while (*str)
 	{
-		right = right + (*str - 48) / factor;
+		result = result + (*str - 48) / factor;
 		factor = factor * 10;
 		str++;
 	}
-	return ((left + right) * sign);
+	return (result);
 }
