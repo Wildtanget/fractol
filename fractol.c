@@ -269,3 +269,5 @@ t_rgb hex_to_rgb(int hex)
     color.b = hex & 0xFF;
     return (color);
 }
+
+//cc -Wall -Wextra -Werror  fractol.c minilibx-linux/libmlx_Linux.a -lX11 -lXext -lm -O2

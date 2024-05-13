@@ -49,6 +49,7 @@ typedef struct s_fractal {
     double  scale;
     int     iterations;
     t_rgb   color;
+    t_complex julia;
 }   t_fractal;
 
 typedef struct s_complex {
