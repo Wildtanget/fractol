@@ -25,7 +25,7 @@ double	mandelbrot(t_complex c, t_fractal *fractal)
 	{
 		z = sum_complex(square_complex(z), c);
 		z_squared = (z.x * z.x) + (z.y * z.y);
-		if ((z.x * z.x) + (z.y * z.y) > 4)
+		if ((z.x * z.x) + (z.y * z.y) > 16)
 			return (i + 1 - log(log(sqrt(z_squared))) / log(2.0));
 		i++;
 	}

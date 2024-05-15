@@ -30,7 +30,7 @@ void	render(t_fractal *fractal)
 			z.y = (scale_map(y, 2, -2, HEIGHT)
 					* fractal->scale) - fractal->offset_y;
 			iter = fractal_selecter(z, fractal);
-			if (iter < fractal->iterations && (z.x * z.x) + (z.y * z.y) <= 4)
+			if (iter < fractal->iterations && (z.x * z.x) + (z.y * z.y) <= 16)
 				place_pixel(fractal, x, y, scale_color(iter, fractal));
 			else
 				place_pixel(fractal, x, y, BLACK);

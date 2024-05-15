@@ -49,15 +49,15 @@
 /*=============================================================================
 *                                 Psychedelic Colors
 *============================================================================*/
-# define NEON_GREEN 0x39FF14
-# define ELECTRIC_BLUE 0x00BFFF
-# define HOT_PINK 0xFF69B4
-# define DEEP_PURPLE 0x9400D3
-# define ACID_YELLOW 0xC2FF00
-# define FIERY_ORANGE 0xFF8C00
-# define TURQUOISE 0x40E0D0
-# define CRIMSON_RED 0xDC143C
-# define ROYAL_BLUE 0x4169E1
+# define NEON_GREEN 	0x39FF14
+# define ELECTRIC_BLUE 	0x00BFFF
+# define HOT_PINK 		0xFF69B4
+# define DEEP_PURPLE 	0x9400D3
+# define ACID_YELLOW 	0xC2FF00
+# define FIERY_ORANGE	0xFF8C00
+# define TURQUOISE 		0x40E0D0
+# define CRIMSON_RED 	0xDC143C
+# define ROYAL_BLUE 	0x4169E1
 
 /*=============================================================================
 *                                 Structures
