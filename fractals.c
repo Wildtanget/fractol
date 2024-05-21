@@ -6,7 +6,7 @@
 /*   By: notahtah <notahtah@student.codam.nl>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 18:52:09 by notahtah          #+#    #+#             */
-/*   Updated: 2024/05/13 19:53:37 by notahtah         ###   ########.fr       */
+/*   Updated: 2024/05/21 17:13:23 by notahtah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ double	burning_ship(t_complex c, t_fractal *fractal)
 	int			i;
 	t_complex	z;
 	double		z_squared;
+
 
 	i = 0;
 	z.x = 0.0;

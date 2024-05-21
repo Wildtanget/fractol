@@ -6,14 +6,14 @@
 /*   By: notahtah <notahtah@student.codam.nl>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 18:27:49 by notahtah          #+#    #+#             */
-/*   Updated: 2024/05/13 19:50:54 by notahtah         ###   ########.fr       */
+/*   Updated: 2024/05/21 16:48:36 by notahtah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FRACTOL_H
 # define FRACTOL_H
 
-# include "minilibx-linux/mlx.h"
+# include "minilibx/mlx.h"
 # include <stdio.h>
 # include <stdlib.h>
 # include <X11/X.h>
