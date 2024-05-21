@@ -6,7 +6,7 @@
 /*   By: notahtah <notahtah@student.codam.nl>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 18:27:52 by notahtah          #+#    #+#             */
-/*   Updated: 2024/05/21 17:04:28 by notahtah         ###   ########.fr       */
+/*   Updated: 2024/05/21 20:21:51 by notahtah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ int	main(int argc, char **argv)
 		(void *)close_program, &fractal);
 	mlx_key_hook(fractal.win_ptr, keyhook, &fractal);
 	mlx_mouse_hook(fractal.win_ptr, mousehook, &fractal);
+	print_settings();
 	mlx_loop(fractal.mlx_ptr);
 	return (0);
 }
@@ -37,7 +38,11 @@ void	check_arguments(int argc, char **argv, t_fractal *fractal)
 		fractal->set = BURNING_SHIP;
 	else
 	{
-		printf("Invalid arguments!\nUsage: ./a.out \"fractal\" [x] [y]\n");
+		ft_printf("%sInvalid arguments!\n%s", A_RED, A_RESET);
+		ft_printf("%sUsage:%s	./fractol mandelbrot\n%s", A_GRAY, A_ITA, A_RESET);
+		ft_printf("%s%s	./fractol burning_ship\n%s", A_GRAY, A_ITA, A_RESET);
+		ft_printf("%s%s	./fractol julia [x] [y]\n%s", A_GRAY, A_ITA, A_RESET);
+
 		exit(1);
 	}
 }
@@ -58,7 +63,7 @@ void	close_program(t_fractal *fractal)
 
 void	handle_error(int code)
 {
-	printf("Failed with code: %d", code);
+	ft_printf("Failed with code: %d", code);
 	exit(1);
 }
 
@@ -78,4 +83,20 @@ void	display_settings(t_fractal *fractal)
 		HEIGHT * 0.20, WHITE, "SCROLL WHEEL => ZOOM IN/OUT");
 	mlx_string_put(fractal->mlx_ptr, fractal->win_ptr, WIDTH * 0.04,
 		HEIGHT * 0.22, WHITE, "LEFT CLICK   => CHANGE JULIA");
+}
+
+void	print_settings(void)
+{
+	ft_printf("%sKeyboard controls%s\n", A_BOLD, A_RESET);
+	ft_printf("  R 		=>	Reset all values\n");
+	ft_printf("  W 		=>	Move up\n");
+	ft_printf("  S 		=>	Move down\n");
+	ft_printf("  A 		=>	Move left\n");
+	ft_printf("  D 		=>	Move right\n");
+	ft_printf("  I 		=>	Zoom in\n");
+	ft_printf("  O		=>	Zoom out\n");
+	ft_printf("  1-9		=>	Change color\n\n");
+	ft_printf("%sMouse controls%s\n", A_BOLD, A_RESET);
+	ft_printf("  Scroll wheel	=>	Zoom in or out\n");
+	ft_printf("  Left click	=>	Change argument for Julia fractal\n");
 }

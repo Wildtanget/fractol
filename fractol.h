@@ -6,7 +6,7 @@
 /*   By: notahtah <notahtah@student.codam.nl>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 18:27:49 by notahtah          #+#    #+#             */
-/*   Updated: 2024/05/21 16:48:36 by notahtah         ###   ########.fr       */
+/*   Updated: 2024/05/21 20:25:15 by notahtah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,14 @@
 # define FRACTOL_H
 
 # include "minilibx/mlx.h"
+# include "ft_printf/ft_printf.h"
 # include <stdio.h>
 # include <stdlib.h>
 # include <X11/X.h>
 # include <X11/keysym.h>
 # include <math.h>
+
+# define EXIT_FAILURE 1
 
 /*=============================================================================
 *                                 Window Dimensions
@@ -59,6 +62,15 @@
 # define CRIMSON_RED 	0xDC143C
 # define ROYAL_BLUE 	0x4169E1
 
+/*=============================================================================
+*                                 ANSI Escape Codes
+*============================================================================*/
+# define A_RESET			"\033[0m"
+# define A_GRAY				"\033[0;30m"
+# define A_RED				"\033[0;31m"
+# define A_GREEN			"\033[0;32m"
+# define A_ITA				"\033[3;30m"
+# define A_BOLD				"\033[1;37m"
 /*=============================================================================
 *                                 Structures
 *============================================================================*/
@@ -116,7 +128,7 @@ void		reset(t_fractal *fractal);
 /*=============================================================================
 *                                 String Utilities
 *============================================================================*/
-int			ft_strncmp(char *s1, char *s2, int length);
+// int			ft_strncmp(char *s1, char *s2, int length);
 double		ft_atod(char *str);
 
 /*=============================================================================
@@ -153,5 +165,6 @@ void		shift_color(int keycode, t_fractal *fractal);
 *============================================================================*/
 int			keyhook(int keycode, t_fractal *fractal);
 int			mousehook(int button, int x, int y, t_fractal *fractal);
+void		print_settings(void);
 
 #endif
