@@ -6,7 +6,7 @@
 /*   By: notahtah <notahtah@student.codam.nl>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 18:57:09 by notahtah          #+#    #+#             */
-/*   Updated: 2024/05/13 19:54:07 by notahtah         ###   ########.fr       */
+/*   Updated: 2024/05/21 16:22:16 by notahtah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,12 +59,10 @@ double	ft_atod(char *str)
 	double	left;
 	double	right;
 	int		sign;
-	// double	factor;
 
 	sign = 1;
 	left = 0;
 	right = 0;
-	// factor = 10;
 	while (*str == ' ' || *str == '+')
 		str++;
 	if (*str == '-')
