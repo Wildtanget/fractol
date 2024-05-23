@@ -10,55 +10,159 @@
 #                                                                              #
 # **************************************************************************** #
 
-NAME 	= 	fractol
+#==============================================================================#
+#                                 Program Name								   #
+#==============================================================================#
+NAME 			= 	fractol
 
-SRC 	= 	colors.c \
-			fractals.c \
-			fractol.c \
-			hooks.c \
-			init.c \
-			math_utils.c \
-			render.c \
-			string_utils.c \
+#==============================================================================#
+#                                 Source Files								   #
+#==============================================================================#
+SRC_DIR			=	./src/
+SRC 			= 	$(SRC_DIR)colors.c											\
+					$(SRC_DIR)fractals.c 										\
+					$(SRC_DIR)fractol.c											\
+					$(SRC_DIR)hooks.c											\
+					$(SRC_DIR)init.c											\
+					$(SRC_DIR)math_utils.c										\
+					$(SRC_DIR)render.c											\
+					$(SRC_DIR)string_utils.c									\
+					$(SRC_DIR)settings.c										\
+					$(SRC_DIR)arg_check.c
 
-OBJ				=	$(SRC:%.c=%.o)
+SRC_BONUS_DIR	= 	./src_bonus/
+SRC_BONUS		=	$(SRC_BONUS_DIR)colors_bonus.c								\
+					$(SRC_BONUS_DIR)fractals_bonus.c 							\
+					$(SRC_BONUS_DIR)fractol_bonus.c								\
+					$(SRC_BONUS_DIR)hooks_bonus.c								\
+					$(SRC_BONUS_DIR)init_bonus.c								\
+					$(SRC_BONUS_DIR)math_utils_bonus.c							\
+					$(SRC_BONUS_DIR)render_bonus.c								\
+					$(SRC_BONUS_DIR)string_utils_bonus.c						\
+					$(SRC_BONUS_DIR)settings_bonus.c							\
+					$(SRC_BONUS_DIR)arg_check_bonus.c
 
-LIBFTPRINTF_DIR	=	./ft_printf/
-LIBFTPRINTF		=	libftprintf.a
+#==============================================================================#
+#                                 Objective Files							   #
+#==============================================================================#
+OBJ_DIR			=	./obj/
+OBJ_BONUS_DIR 	=	./obj_bonus/
+OBJ         	=   $(SRC:$(SRC_DIR)%.c=$(OBJ_DIR)%.o)
+OBJ_BONUS		=   $(SRC_BONUS:$(SRC_BONUS_DIR)%.c=$(OBJ_BONUS_DIR)%.o)
 
-MLXDIR	=	./minilibx/
-MLX		=	libmlx.a
+#==============================================================================#
+#                                 External Archives							   #
+#==============================================================================#
+LIBFT_DIR		=	./libft/
+LIBFT			=	$(LIBFT_DIR)libft.a
 
-CC		=	cc
-FLAGS	=	-Wall -Wextra -Werror
-LINK	=	-lX11 -lXext -lm
+MLX_DIR			=	./minilibx/
+MLX				=	$(MLX_DIR)libmlx.a
 
-White="\033[0m"
-Gray="\033[0;30m"
-Green="\033[0;32m"
+#==============================================================================#
+#                                 Compiler Options							   #
+#==============================================================================#
+CC				=	cc
+CFLAGS			=	-Wall -Wextra -Werror
+LINK			=	-lX11 -lXext -lm
 
-all: $(NAME)
+#==============================================================================#
+#                                 Colors									   #
+#==============================================================================#
+White			=	"\033[0m"
+Green			=	"\033[0;32m"
+Cyan        	=   "\033[0;36m"
+Yellow      	=   "\033[0;33m"
+Red         	=   "\033[0;31m"
+
+#==============================================================================#
+#                                 Targets									   #
+#==============================================================================#
+
+$(NAME): $(LIBFT) $(MLX) $(OBJ_DIR) $(OBJ)
+		@echo $(Cyan) "============================================================" $(White)
+		@echo $(Green) "Building Fractol..." $(White)
+		@echo $(Cyan) "============================================================" $(White)
+		$(CC) $(CFLAGS) $(OBJ) $(MLX) $(LIBFT) $(LINK) -o $(NAME)
+		@echo $(Cyan) "============================================================" $(White)
+		@echo $(Green) "Fractol is ready to be used!" $(White)
+		@echo $(Cyan) "============================================================" $(White)
+
+all: bonus
+
+bonus: $(LIBFT) $(MLX) $(OBJ_BONUS_DIR) $(OBJ_BONUS)
+		@echo $(Cyan) "============================================================" $(White)
+		@echo $(Green) "Building Fractol..." $(White)
+		@echo $(Cyan) "============================================================" $(White)
+		$(CC) $(CFLAGS) $(OBJ_BONUS) $(MLX) $(LIBFT) $(LINK) -o $(NAME)
+		@echo $(Cyan) "============================================================" $(White)
+		@echo $(Green) "Fractol is ready to be used!" $(White)
+		@echo $(Cyan) "============================================================" $(White)
 		
-$(NAME): $(OBJ)
-		make -C $(LIBFTPRINTF_DIR) --no-print-directory
-		@echo $(Gray) "Creating MiniLibX..." $(White)
-		make -C $(MLXDIR) --no-print-directory
-		@echo $(Gray) "Creating $(NAME)..." $(White)
-		$(CC) $(FLAGS) $(SRC) $(MLXDIR)$(MLX) $(LIBFTPRINTF_DIR)$(LIBFTPRINTF) $(LINK) -o $(NAME)
-		@echo $(Green) "Succesfully created $(NAME)!" $(White)
+$(OBJ_DIR):
+		@echo $(Cyan) "============================================================" $(White)
+		@echo $(Green) "Compiling all objective files..." $(White)
+		@echo $(Cyan) "============================================================" $(White)
+		mkdir $(OBJ_DIR)
+
+$(OBJ_BONUS_DIR):
+		@echo $(Cyan) "============================================================" $(White)
+		@echo $(Green) "Compiling all objective files..." $(White)
+		@echo $(Cyan) "============================================================" $(White)
+		mkdir $(OBJ_BONUS_DIR)
+
+$(OBJ_DIR)%.o: $(SRC_DIR)%.c
+		$(CC) $(CFLAGS) -c $< -o $@
+
+$(OBJ_BONUS_DIR)%.o: $(SRC_BONUS_DIR)%.c
+		$(CC) $(CFLAGS) -c $< -o $@
+
+$(LIBFT):
+		@echo $(Cyan) "============================================================" $(White)
+		@echo $(Green) "Building LibFT..." $(White)
+		@echo $(Cyan) "============================================================" $(White)
+		make -C $(LIBFT_DIR) --no-print-directory
+
+$(MLX):
+		@echo $(Cyan) "============================================================" $(White)
+		@echo $(Green) "Building MiniLibX..." $(White)
+		@echo $(Cyan) "============================================================" $(White)
+		make -C $(MLX_DIR) --no-print-directory
 
 clean:
-		@echo $(Gray) "Removing all objective files..." $(White)
-		rm -f $(OBJ)
-		@echo $(Gray) "Removing all MiniLibX objective files..." $(White)
-		make -C $(MLXDIR) clean --no-print-directory
-		make -C $(LIBFTPRINTF_DIR) clean --no-print-directory
-		@echo $(Green) "All object files have been removed." $(White)
+		@echo $(Cyan) "============================================================" $(White)
+		@echo $(Red) "Removing all objective files..." $(White)
+		@echo $(Cyan) "============================================================" $(White)
+		rm -rf $(OBJ_DIR)
+		rm -rf $(OBJ_BONUS_DIR)
+		@echo $(Cyan) "============================================================" $(White)
+		@echo $(Red) "Removing all MiniLibX objective files..." $(White)
+		@echo $(Cyan) "============================================================" $(White)
+		make -C $(MLX_DIR) clean --no-print-directory
+		@echo $(Cyan) "============================================================" $(White)
+		@echo $(Red) "Removing all LibFT objective files..." $(White)
+		@echo $(Cyan) "============================================================" $(White)
+		make -C $(LIBFT_DIR) clean --no-print-directory
+		@echo $(Cyan) "============================================================" $(White)
+		@echo $(Red) "All object files have been removed." $(White)
+		@echo $(Cyan) "============================================================" $(White)
 
 fclean: clean
-		@echo $(Gray) "Removing $(NAME)..." $(White)
-		make -C $(LIBFTPRINTF_DIR) fclean --no-print-directory
+		@echo $(Cyan) "============================================================" $(White)
+		@echo $(Red) "Removing LibFT..." $(White)
+		@echo $(Cyan) "============================================================" $(White)
+		make -C $(LIBFT_DIR) fclean --no-print-directory
+		@echo $(Cyan) "============================================================" $(White)
+		@echo $(Red) "Removing Fractol..." $(White)
+		@echo $(Cyan) "============================================================" $(White)
 		rm -f $(NAME)
-		@echo $(Green) "All program files have been removed." $(White)
+		@echo $(Cyan) "============================================================" $(White)
+		@echo $(Red) "Fractol and all external libraries have been removed." $(White)
+		@echo $(Cyan) "============================================================" $(White)
 
-re: fclean all
+re: fclean $(NAME)
+
+norm:
+	norminette inc libft src src_bonus
+
+.PHONY: all fclean clean re norm
