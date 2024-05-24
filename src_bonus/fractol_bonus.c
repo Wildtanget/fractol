@@ -43,7 +43,8 @@ void	close_program(t_fractal *fractal)
 
 void	handle_error(t_fractal *fractal, char *error)
 {
-	perror(error);
+	ft_printf("%s%s%s\n", A_RED, error, A_RESET);
+	perror("Error");
 	if (fractal->img.addr)
 		mlx_destroy_image(fractal->mlx_ptr, fractal->img.img);
 	if (fractal->win_ptr)
