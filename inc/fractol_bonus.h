@@ -118,11 +118,14 @@ typedef struct s_fractal
 *============================================================================*/
 
 void		close_program(t_fractal *fractal);
+void		handle_error(t_fractal *fractal, char *error);
+void		start_message(t_fractal *fractal);
+
+/*=============================================================================
+*                                 Argument Check
+*============================================================================*/
 int			check_arguments(int argc, char **argv, t_fractal *fractal);
 int			check_julia(char *re, char *im);
-void		handle_error(t_fractal *fractal, char *error);
-void		display_settings(t_fractal *fractal);
-void		start_message(t_fractal *fractal);
 int			check_number(char *num);
 /*=============================================================================
 *                                 Initialization
@@ -170,6 +173,11 @@ void		shift_color(int keycode, t_fractal *fractal);
 void		start_hooks(t_fractal *fractal);
 int			keyhook(int keycode, t_fractal *fractal);
 int			mousehook(int button, int x, int y, t_fractal *fractal);
+
+/*=============================================================================
+*                                 Settings
+*============================================================================*/
 void		print_settings(void);
+void		display_settings(t_fractal *fractal);
 
 #endif
